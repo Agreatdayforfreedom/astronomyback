@@ -4,6 +4,7 @@ import cors from 'cors';
 import { runDatabase } from './database';
 import routerPost from './routes/post';
 import routerUser from './routes/auth';
+import routerMessage from './routes/message';
 dotenv.config();
 
 if(!process.env.PORT){
@@ -29,5 +30,6 @@ app.use(cors());
 
 app.use('/api/post', routerPost);
 app.use('/api/auth', routerUser);
+app.use('/api/message', routerMessage);
 
 export default app;

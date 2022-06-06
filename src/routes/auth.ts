@@ -10,9 +10,9 @@ const routerUser = Router();
 
 routerUser.post('/signup', async(request: Request, response: Response) => {
     try {
-        const userExists: ITF.IUser = await User.findOne({email: request.body.email}) as ITF.IUser;
+        const userExists: ITF.IUser = await User.findOne({username: request.body.username}) as ITF.IUser;
         if(userExists){
-            const err = new Error('Email already exists.');
+            const err = new Error('Username already exists.');
             return response.status(400).json({msg: err.message});
         }
         if(request.body.password.length < 6){
@@ -28,8 +28,6 @@ routerUser.post('/signup', async(request: Request, response: Response) => {
 
         await newUser.save();
         response.status(201).json({msg: 'User registered successfully'});
-
-
     } catch (error) {
        const err = new Error('There was a mistake');
        return response.status(500).json({msg: err.message});
@@ -51,6 +49,9 @@ routerUser.post('/signin', async(request: Request, response: Response) => {
         }
 
         response.json({
+            _id: userExists._id,
+            username: userExists.username,
+            email: userExists.email || 'withoutemail',
             token: generateJwt(userExists._id)
         });
 

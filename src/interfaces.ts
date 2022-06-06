@@ -5,6 +5,8 @@ export interface IPost extends Document{
     title: string;
     subject: string;
     owner: Types.ObjectId;
+		messages: Types.ObjectId[];
+
 }
 
 export interface IUser extends Document {
@@ -16,6 +18,12 @@ export interface IUser extends Document {
     confirmed: boolean;
     imgProfile?: string;
     comparePassword: (password: string) => boolean;
+}
+
+export interface IMessage extends Document {
+  message: string;
+	emitter: Types.ObjectId;
+	post: Types.ObjectId;
 }
 
 export interface IPayload {

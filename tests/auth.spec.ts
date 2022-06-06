@@ -4,7 +4,7 @@ import User from '../src/models/User';
 import {request} from './utils/index'
 
 //todo: this does not run on another db 
-describe('AUTH CONTROLLER', () => {
+describe('AUTH', () => {
     beforeAll(async() => {
         await User.deleteMany();
     });
@@ -18,7 +18,7 @@ describe('AUTH CONTROLLER', () => {
             expect(response.body).toBeDefined();
         });
 
-        test('it should not repeat a user', async() => {
+        test('it should not repeat a user', async(): Promise<void> => {
             const response = await request.post('/api/auth/signup')
                 .set('content-type', 'application/json')
                 .send({username: 'soma', email: 'soma@gmail.com', password: 'password'});
@@ -28,7 +28,7 @@ describe('AUTH CONTROLLER', () => {
     });
 
     describe('[POST] signin', () => {
-        test('should respond with a token', async() => {
+        test('should respond with a token', async(): Promise<void> => {
             const response = await request.post('/api/auth/signin')
                 .set('content-type', 'application/json')
                 .send({username: 'soma', password: 'password'});
@@ -39,6 +39,6 @@ describe('AUTH CONTROLLER', () => {
 });
 
 afterAll(() => {
-    mongoose.connection.close();
-    server.close();
+  mongoose.connection.close();
+  server.close();
 });
