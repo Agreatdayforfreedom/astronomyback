@@ -7,7 +7,9 @@ import checkAuth from '../utils/CheckAuth';
 const routerPost = Router();
 
 routerPost.get('/', async(request: Request, response: Response) => {
-    const posts: ITF.IPost[] = await Post.find().populate({path: 'owner', select: '_id username email'});
+    const posts: ITF.IPost[] = await Post.find()
+			.populate({path: 'owner', select: '_id username email'})
+			.populate({path: 'messages'});
     response.json(posts);
 });
 
@@ -16,7 +18,9 @@ routerPost.get('/:id', async(request: Request, response: Response) => {
     const { id } = request.params;
 
     try {
-        const post: ITF.IPost = await Post.findById({_id: id}).populate({path: 'owner', select: '_id username email'}) as ITF.IPost;
+        const post: ITF.IPost = await Post.findById({_id: id})
+					.populate({path: 'owner', select: '_id username email'})
+					.populate({path: 'messages'}) as ITF.IPost;
         if(!post) return response.status(404).json({msg: 'Resource not found'});
         response.json(post);
     } catch (error) {

@@ -6,6 +6,7 @@ import {request} from './utils/index'
 describe('POSTS', () => {
 	let token: string;
 	let idPost: string;
+	
 
 	beforeAll(async() => {
 		await Post.deleteMany();
@@ -51,6 +52,7 @@ describe('POSTS', () => {
 				.set('content-type', 'application/json')
 			expect(response.statusCode).toBe(200);
 			expect(response.body).toBeDefined();
+			expect(response.body.owner).toBeDefined();
 			expect(response.body._id).toEqual(idPost);
 		});
 	});

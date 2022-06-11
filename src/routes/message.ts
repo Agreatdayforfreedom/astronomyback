@@ -29,10 +29,27 @@ routerMessage.post('/', checkAuth, async(request: Request, response: Response) =
 		console.log(error);
 	}
 });
-routerMessage.put('/', async(request: Request, response: Response) => {});
+routerMessage.put('/:id', checkAuth, async(request: Request, response: Response) => {
+	const { id } = request.params;
+	
+	try {
+		const messageUpdate: ITF.IMessage = await Message.findById({_id: id}) as ITF.IMessage;
+		// const postMessageUpdate: ITF.IPost = await Post.findById({_id: messageUpdate._id}) as ITF.IPost; 
+		console.log(messageUpdate)
+		console.log(request.user)
+		if(messageUpdate.emitter.toString() !== request.user._id.toString()) return response.status(401).json({msg: 'Access denied'});
+
+		messageUpdate.message = request.body.message || messageUpdate.message;
+
+		const messageUpdated = await messageUpdate.save();
+		response.json(messageUpdated);
+	} catch (error) {
+		console.log(error);
+	}
+
+});
 routerMessage.delete('/:id', checkAuth, async(request: Request, response: Response) => {
 	const removeMessage: ITF.IMessage = await Message.findById({_id: request.params.id}) as ITF.IMessage;
-	console.log(removeMessage)
 	const removeMessagePost: ITF.IPost = await Post.findById({_id: removeMessage.post}) as ITF.IPost;
 
 	
